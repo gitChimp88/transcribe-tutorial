@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
-import TranscribeContainer from '../containers/TranscribeContainer';
+import MeetingDashboardContainer from '../containers/MeetingDashboardContainer';
 
 export default function Home() {
   return (
@@ -18,7 +18,7 @@ export default function Home() {
             Strapi Transcribe!
           </a>
         </h1>
-        <TranscribeContainer />
+        <MeetingDashboardContainer />
       </main>
 
       <footer className={styles.footer}>Powered by Strapi</footer>

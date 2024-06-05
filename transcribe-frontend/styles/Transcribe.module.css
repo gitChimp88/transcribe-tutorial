@@ -1,0 +1,227 @@
+.control-container {
+  margin: 0 auto;
+  width: 380px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin: 10px;
+}
+
+.primary-text {
+  color: var(--primaryLight);
+}
+
+.primary-button {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.primary-button:hover {
+  background-color: var(--primaryLight);
+}
+
+.primary-button-analysis {
+  background-color: var(--secondaryLight);
+  color: black;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.primary-button-answer {
+  background-color: #c8e6c9;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.primary-button-answer:hover {
+  background-color: var(--primaryLight);
+}
+.primary-button-analysis:hover {
+  background-color: var(--primaryLight);
+}
+
+.secondary-button {
+  background-color: #d3d3d3;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.secondary-button:hover {
+  background-color: #b0b0b0;
+}
+
+.end-meeting-button {
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.end-meeting-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px 20px;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 20px;
+}
+
+.end-meeting-button:hover {
+  background-color: darkred;
+}
+
+.transcribed-text-container {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.speech-bubble-container {
+  width: 80%;
+  margin: 20px;
+}
+
+.speech-bubble {
+  position: relative;
+  background-color: var(--primaryLight);
+  border: 2px solid var(--primaryLight);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.speech-pointer {
+  position: absolute;
+  top: 0;
+  left: -19px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 20px 20px;
+  border-color: transparent transparent var(--primaryLight) transparent;
+}
+
+.speech-text-question {
+  margin: 0;
+  font-size: 16px;
+  line-height: 16px;
+  letter-spacing: 1.4px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: white;
+}
+
+.speech-bubble-right {
+  position: relative;
+  background-color: #c8e6c9;
+  border: 2px solid #c8e6c9;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.speech-pointer-right {
+  position: absolute;
+  top: -2px;
+  right: -17px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 20px 20px;
+  border-color: transparent transparent transparent #c8e6c9;
+}
+
+.speech-text-answer {
+  margin: 0;
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: 1.8px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: black;
+}
+
+.analysis-bubble {
+  position: relative;
+  background-color: var(--secondaryLight);
+  border: 2px solid var(--secondaryLight);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.analysis-pointer {
+  position: absolute;
+  top: -2px;
+  right: -17px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 20px 20px;
+  border-color: transparent transparent transparent var(--secondaryLight);
+}
+
+.transcribed-text-container {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.custom-input {
+  font-size: 20px;
+  border: none;
+  border-bottom: 2px solid #000; /* Adjust the color as needed */
+  padding: 5px 0;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 20px;
+}
+
+.custom-input:focus {
+  outline: none;
+  border-bottom: 2px solid var(--primary);
+  margin: 20px;
+}
+
+@media (max-width: 700px) {
+  .transcribed-text-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .button-container {
+    width: 100%;
+  }
+
+  .primary-button {
+    width: 100%;
+    margin: 5px 0;
+  }
+}
