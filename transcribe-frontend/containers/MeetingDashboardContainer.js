@@ -1,45 +1,91 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from '../styles/Meeting.module.css';
 import MeetingCard from '../components/meeting/MeetingCard';
-import Link from 'next/link';
-
-const meeting = [
-  {
-    overview:
-      'Overview of the meeting here Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit distinctio quas asperiores reiciendis! Facilis quia recusandae velfacere delect corrupti!',
-    title: 'Example title 1',
-  },
-  {
-    overview:
-      'Overview of the meeting here Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit distinctio quas asperiores reiciendis! Facilis quia recusandae velfacere delect corrupti!',
-    title: 'Example title 2',
-  },
-  {
-    overview:
-      'Overview of the meeting here Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit distinctio quas asperiores reiciendis! Facilis quia recusandae velfacere delect corrupti!',
-    title: 'Example title 3',
-  },
-];
+import { useRouter } from 'next/router';
+import { useMeetings } from '../hooks/useMeetings';
 
 const MeetingDashboardContainer = () => {
+  const router = useRouter();
+  const {
+    meetings,
+    loading,
+    error,
+    getMeetings,
+    createMeeting,
+    deleteMeetingDetails,
+  } = useMeetings();
+
+  useEffect(() => {
+    fetchMeetings();
+  }, []);
+
+  const fetchMeetings = async () => {
+    await getMeetings();
+  };
+
+  const handleNewMeeting = async () => {
+    try {
+      // Call the API to create a new meeting
+      const newMeeting = await createMeeting();
+
+      // Route to transcription page and pass the newly created meeting id
+      router.push(`/transcription?meetingId=${newMeeting.id}`);
+    } catch (error) {
+      console.error('Error creating new meeting:', error);
+      alert('Failed to create a new meeting. Please try again.');
+    }
+  };
+
+  const openMeeting = (meetingId) => {
+    router.push(`/transcription?meetingId=${meetingId}`);
+  };
+
+  const deleteMeeting = async (meetingId) => {
+    try {
+      await deleteMeetingDetails(meetingId);
+      // refetch meeting dashboard data
+      await getMeetings();
+    } catch (error) {
+      console.error('Error deleting meeting:', error);
+      alert('Failed to delete meeting. Please try again.');
+    }
+  };
+
   return (
     <div id={styles['meeting-container']}>
-      <div class={styles['cs-container']}>
-        <div class={styles['cs-content']}>
-          <div class={styles['cs-content-flex']}>
-            <span class={styles['cs-topper']}>Meeting dashboard</span>
-            <h2 class={styles['cs-title']}>Start a new meeting!</h2>
+      <div className={styles['cs-container']}>
+        <div className={styles['cs-content']}>
+          <div className={styles['cs-content-flex']}>
+            <span className={styles['cs-topper']}>Meeting dashboard</span>
+            <h2 className={styles['cs-title']}>Start a new meeting!</h2>
           </div>
-          <Link href="/transcription" class={styles['cs-button-solid']}>
+          <button
+            onClick={handleNewMeeting}
+            className={styles['cs-button-solid']}
+          >
             New meeting
-          </Link>
+          </button>
         </div>
-        <ul class={styles['cs-card-group']}>
-          {meeting.map((val, i) => {
-            return (
-              <MeetingCard key={i} title={val.title} overview={val.overview} />
-            );
-          })}
+        <ul className={styles['cs-card-group']}>
+          {loading ? (
+            <p>Loading...</p>
+          ) : error ? (
+            <p>Error loading previous meetings</p>
+          ) : (
+            meetings.map((val, i) => {
+              const { title, overview } = val.attributes;
+              return (
+                <MeetingCard
+                  key={val.id}
+                  title={title}
+                  id={val.id}
+                  overview={overview}
+                  openMeeting={openMeeting}
+                  deleteMeeting={deleteMeeting}
+                />
+              );
+            })
+          )}
         </ul>
       </div>
     </div>

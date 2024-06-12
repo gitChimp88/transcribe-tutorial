@@ -195,19 +195,40 @@
 }
 
 .custom-input {
-  font-size: 20px;
   border: none;
-  border-bottom: 2px solid #000; /* Adjust the color as needed */
+  border-bottom: 2px solid #000;
   padding: 5px 0;
   width: 100%;
   box-sizing: border-box;
   margin: 20px;
+  line-height: 1.15;
+  font-size: 4rem;
 }
 
 .custom-input:focus {
   outline: none;
   border-bottom: 2px solid var(--primary);
   margin: 20px;
+}
+
+.title {
+  margin: 20px;
+  line-height: 1.15;
+  font-size: 4rem;
+}
+
+.goBackButton {
+  margin-right: 10px;
+  padding: 5px 10px;
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.goBackButton:hover {
+  background-color: #005bb5;
 }
 
 @media (max-width: 700px) {

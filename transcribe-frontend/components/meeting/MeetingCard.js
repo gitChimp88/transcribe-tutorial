@@ -1,15 +1,27 @@
 import styles from '../../styles/Meeting.module.css';
 
-const MeetingCard = ({ title, overview }) => {
+const MeetingCard = ({ title, id, overview, openMeeting, deleteMeeting }) => {
   return (
-    <li class={styles['cs-item']}>
-      <div class={styles['cs-flex']}>
-        <h3 class={styles['cs-h3']}>{title}</h3>
-        <p class={styles['cs-item-text']}>{overview}</p>
-        <a href="" class={styles['cs-link']}>
+    <li className={styles['cs-item']}>
+      <div className={styles['cs-flex']}>
+        <div style={{ display: 'flex', width: '100%' }}>
+          <h3 className={styles['cs-h3']}>{title}</h3>
+          <div
+            onClick={() => deleteMeeting(id)}
+            style={{
+              marginLeft: 'auto',
+              cursor: 'pointer',
+              padding: '5px',
+            }}
+          >
+            X
+          </div>
+        </div>
+        <p className={styles['cs-item-text']}>{overview}</p>
+        <p onClick={() => openMeeting(id)} className={styles['cs-link']}>
           Open meeting
           <img
-            class={styles['cs-arrow']}
+            className={styles['cs-arrow']}
             loading="lazy"
             decoding="async"
             src="https://csimg.nyc3.cdn.digitaloceanspaces.com/Icons/event-chevron.svg"
@@ -18,7 +30,7 @@ const MeetingCard = ({ title, overview }) => {
             height="20"
             aria-hidden="true"
           />
-        </a>
+        </p>
       </div>
     </li>
   );

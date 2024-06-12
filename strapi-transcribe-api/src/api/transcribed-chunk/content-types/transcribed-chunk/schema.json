@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "transcribed_chunks",
+  "info": {
+    "singularName": "transcribed-chunk",
+    "pluralName": "transcribed-chunks",
+    "displayName": "transcribed-chunk"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "text": {
+      "type": "text"
+    },
+    "analysis": {
+      "type": "text"
+    },
+    "answer": {
+      "type": "text"
+    }
+  }
+}
