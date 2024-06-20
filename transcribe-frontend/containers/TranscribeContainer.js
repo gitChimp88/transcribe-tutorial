@@ -90,7 +90,7 @@ const TranscribeContainer = ({ streaming = true, timeSlice = 1000 }) => {
     // re-fetch current meeting which should have updated transcriptions
     await getMeetingDetails(meetingId);
     // Stop and clear the current transcription as it's now saved
-    handleStopRecording();
+    await handleStopRecording();
   };
 
   const handleGoBack = () => {

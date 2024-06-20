@@ -99,7 +99,6 @@ export const useAudioRecorder = (
 
   const handleStopRecording = async () => {
     try {
-      setTranscribed('');
       if (recorder.current) {
         const recordState = await recorder.current.getState();
         if (recordState === 'recording' || recordState === 'paused') {
