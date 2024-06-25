@@ -79,7 +79,7 @@ const MeetingDashboardContainer = () => {
                   key={val.id}
                   title={title}
                   id={val.id}
-                  overview={overview}
+                  overview={overview.split(' ').slice(0, 30).join(' ') + '...'}
                   openMeeting={openMeeting}
                   deleteMeeting={deleteMeeting}
                 />

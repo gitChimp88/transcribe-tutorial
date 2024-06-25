@@ -6,6 +6,8 @@ function TranscribedText({
   analysis,
   handleGetAnalysis,
   handleGetAnswer,
+  loading,
+  current,
 }) {
   return (
     <div className={styles['transcribed-text-container']}>
@@ -14,25 +16,33 @@ function TranscribedText({
           <div className={styles['speech-bubble']}>
             <div className={styles['speech-pointer']}></div>
             <div className={styles['speech-text-question']}>{transcribed}</div>
-            <div className={styles['button-container']}>
-              <button
-                className={styles['primary-button-analysis']}
-                onClick={handleGetAnalysis}
-              >
-                Get analysis
-              </button>
-              <button
-                className={styles['primary-button-answer']}
-                onClick={handleGetAnswer}
-              >
-                Get answer
-              </button>
-            </div>
+            {!current && (
+              <div className={styles['button-container']}>
+                <button
+                  className={styles['primary-button-analysis']}
+                  onClick={handleGetAnalysis}
+                >
+                  Get analysis
+                </button>
+                <button
+                  className={styles['primary-button-answer']}
+                  onClick={handleGetAnswer}
+                >
+                  Get answer
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
       <div>
         <div className={styles['speech-bubble-container']}>
+          {loading && (
+            <div className={styles['analysis-bubble']}>
+              <div className={styles['analysis-pointer']}></div>
+              <div className={styles['speech-text-answer']}>Loading...</div>
+            </div>
+          )}
           {analysis && (
             <div className={styles['analysis-bubble']}>
               <div className={styles['analysis-pointer']}></div>

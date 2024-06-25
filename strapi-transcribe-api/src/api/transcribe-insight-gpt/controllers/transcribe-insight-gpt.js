@@ -1,15 +1,16 @@
-'use strict';
-
-/**
- * A set of functions called "actions" for `transcribe-insight-gpt`
- */
+"use strict";
 
 module.exports = {
-  // exampleAction: async (ctx, next) => {
-  //   try {
-  //     ctx.body = 'ok';
-  //   } catch (err) {
-  //     ctx.body = err;
-  //   }
-  // }
+  exampleAction: async (ctx) => {
+    try {
+      const response = await strapi
+        .service("api::transcribe-insight-gpt.transcribe-insight-gpt")
+        .insightService(ctx);
+
+      ctx.body = { data: response };
+    } catch (err) {
+      console.log(err.message);
+      throw new Error(err.message);
+    }
+  },
 };

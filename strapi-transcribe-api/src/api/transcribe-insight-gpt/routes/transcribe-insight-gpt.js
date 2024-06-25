@@ -1,13 +1,13 @@
 module.exports = {
   routes: [
-    // {
-    //  method: 'GET',
-    //  path: '/transcribe-insight-gpt',
-    //  handler: 'transcribe-insight-gpt.exampleAction',
-    //  config: {
-    //    policies: [],
-    //    middlewares: [],
-    //  },
-    // },
+    {
+      method: "POST",
+      path: "/transcribe-insight-gpt/exampleAction",
+      handler: "transcribe-insight-gpt.exampleAction",
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
   ],
 };

@@ -3,19 +3,14 @@ import styles from '../styles/Transcribe.module.css';
 import { useAudioRecorder } from '../hooks/useAudioRecorder';
 import RecordingControls from '../components/transcription/RecordingControls';
 import TranscribedText from '../components/transcription/TranscribedText';
+import ErrorToast from '../components/ErrorToast';
 import { useRouter } from 'next/router';
 import { useMeetings } from '../hooks/useMeetings';
+import { useInsightGpt } from '../hooks/useInsightGpt';
 import { createNewTranscription } from '../api/transcriptions';
-
-const mockAnswer =
-  'Example answer to transcription here: Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit distinctio quas asperiores reiciendis! Facilis quia recusandae velfacere delect corrupti!';
-const mockAnalysis =
-  'Example analysis to transcription here: Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit distinctio quas asperiores reiciendis! Facilis quia recusandae velfacere delect corrupti!';
 
 const TranscribeContainer = ({ streaming = true, timeSlice = 1000 }) => {
   const router = useRouter();
-  const [analysis, setAnalysis] = useState('');
-  const [answer, setAnswer] = useState('');
   const [meetingId, setMeetingId] = useState(null);
   const [meetingTitle, setMeetingTitle] = useState('');
   const {
@@ -26,12 +21,24 @@ const TranscribeContainer = ({ streaming = true, timeSlice = 1000 }) => {
     error,
     meetingDetails,
   } = useMeetings();
+  const {
+    loadingAnalysis,
+    transcriptionIdLoading,
+    analysisError,
+    getAndSaveTranscriptionAnalysis,
+    getAndSaveOverviewAnalysis,
+  } = useInsightGpt();
   const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
   const whisperApiEndpoint = 'https://api.openai.com/v1/audio/';
-  const { recording, transcribed, handleStartRecording, handleStopRecording } =
-    useAudioRecorder(streaming, timeSlice, apiKey, whisperApiEndpoint);
+  const {
+    recording,
+    transcribed,
+    handleStartRecording,
+    handleStopRecording,
+    setTranscribed,
+  } = useAudioRecorder(streaming, timeSlice, apiKey, whisperApiEndpoint);
 
-  const { ended } = meetingDetails;
+  const { ended, overview } = meetingDetails;
   const transcribedHistory = meetingDetails?.transcribed_chunks?.data;
 
   useEffect(() => {
@@ -56,17 +63,30 @@ const TranscribeContainer = ({ streaming = true, timeSlice = 1000 }) => {
     setMeetingTitle(meetingDetails.title);
   }, [meetingDetails]);
 
-  const handleGetAnalysis = () => {
-    setAnalysis(mockAnalysis);
+  const handleGetAnalysis = async (input, transcriptionId) => {
+    await getAndSaveTranscriptionAnalysis('analysis', input, transcriptionId);
+    // re-fetch meeting details
+    await getMeetingDetails(meetingId);
   };
 
-  const handleGetAnswer = () => {
-    setAnswer(mockAnswer);
+  const handleGetAnswer = async (input, transcriptionId) => {
+    await getAndSaveTranscriptionAnalysis('answer', input, transcriptionId);
+    // re-fetch meeting details
+    await getMeetingDetails(meetingId);
   };
 
   const handleStopMeeting = async () => {
     // provide meeting overview and save it
-    // getMeetingOverview(transcribed_chunks)
+    const transcribedHistoryText = transcribedHistory
+      .map((val) => `transcribed_chunk: ${val.attributes.text}`)
+      .join(', ');
+
+    await getAndSaveOverviewAnalysis(
+      'analysis',
+      transcribedHistoryText,
+      meetingId
+    );
+
     await updateMeetingDetails(
       {
         title: meetingTitle,
@@ -77,6 +97,7 @@ const TranscribeContainer = ({ streaming = true, timeSlice = 1000 }) => {
 
     // re-fetch meeting details
     await getMeetingDetails(meetingId);
+    setTranscribed('');
   };
 
   const stopAndSaveTranscription = async () => {
@@ -103,6 +124,9 @@ const TranscribeContainer = ({ streaming = true, timeSlice = 1000 }) => {
 
   return (
     <div style={{ margin: '20px' }}>
+      {error || analysisError ? (
+        <ErrorToast message={error || analysisError} duration={5000} />
+      ) : null}
       {ended && (
         <button onClick={handleGoBack} className={styles.goBackButton}>
           Go Back
@@ -128,6 +152,13 @@ const TranscribeContainer = ({ streaming = true, timeSlice = 1000 }) => {
         />
       )}
       <div>
+        {loadingAnalysis && <p>Loading Overview...</p>}
+        {overview && (
+          <div>
+            <h1>Overview</h1>
+            <p>{overview}</p>
+          </div>
+        )}
         {!ended && (
           <div>
             <RecordingControls
@@ -144,29 +175,31 @@ const TranscribeContainer = ({ streaming = true, timeSlice = 1000 }) => {
 
         {/*Current transcription*/}
         {transcribed && <h1>Current transcription</h1>}
-        <TranscribedText
-          transcribed={transcribed}
-          answer={answer}
-          analysis={analysis}
-          handleGetAnalysis={handleGetAnalysis}
-          handleGetAnswer={handleGetAnswer}
-        />
+        <TranscribedText transcribed={transcribed} current={true} />
 
         {/*Transcribed history*/}
         <h1>History</h1>
-        {transcribedHistory?.map((val, i) => {
-          const transcribedChunk = val.attributes;
-          return (
-            <TranscribedText
-              key={i}
-              transcribed={transcribedChunk.text}
-              answer={transcribedChunk.answer}
-              analysis={transcribedChunk.analysis}
-              handleGetAnalysis={handleGetAnalysis}
-              handleGetAnswer={handleGetAnswer}
-            />
-          );
-        })}
+        {transcribedHistory
+          ?.slice()
+          .reverse()
+          .map((val, i) => {
+            const transcribedChunk = val.attributes;
+            const text = transcribedChunk.text;
+            const transcriptionId = val.id;
+            return (
+              <TranscribedText
+                key={transcriptionId}
+                transcribed={text}
+                answer={transcribedChunk.answer}
+                analysis={transcribedChunk.analysis}
+                handleGetAnalysis={() =>
+                  handleGetAnalysis(text, transcriptionId)
+                }
+                handleGetAnswer={() => handleGetAnswer(text, transcriptionId)}
+                loading={transcriptionIdLoading === transcriptionId}
+              />
+            );
+          })}
       </div>
     </div>
   );

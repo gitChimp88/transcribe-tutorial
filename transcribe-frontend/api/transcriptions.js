@@ -25,3 +25,28 @@ export async function createNewTranscription(transcription) {
     throw error;
   }
 }
+
+export async function updateTranscription(
+  updatedTranscription,
+  transcriptionId
+) {
+  const updateURL = `${url}/${transcriptionId}`;
+  const payload = {
+    data: updatedTranscription,
+  };
+
+  try {
+    const res = await fetch(updateURL, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    return await res.json();
+  } catch (error) {
+    console.error('Error updating meeting:', error);
+    throw error;
+  }
+}

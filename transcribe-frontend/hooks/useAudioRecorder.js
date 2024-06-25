@@ -153,5 +153,6 @@ export const useAudioRecorder = (
     transcribed,
     handleStartRecording,
     handleStopRecording,
+    setTranscribed,
   };
 };
