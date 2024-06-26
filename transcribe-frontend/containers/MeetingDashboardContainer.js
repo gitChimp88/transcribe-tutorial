@@ -72,7 +72,7 @@ const MeetingDashboardContainer = () => {
           ) : error ? (
             <p>Error loading previous meetings</p>
           ) : (
-            meetings.map((val, i) => {
+            meetings?.map((val, i) => {
               const { title, overview } = val.attributes;
               return (
                 <MeetingCard
