@@ -118,8 +118,6 @@ const TranscribeContainer = ({ streaming = true, timeSlice = 1000 }) => {
     router.back();
   };
 
-  console.log('meetingDetails - ', meetingDetails);
-
   if (loading) return <p>Loading...</p>;
 
   return (
