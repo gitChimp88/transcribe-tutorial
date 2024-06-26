@@ -1,4 +1,7 @@
-const baseUrl = 'http://localhost:1337';
+const baseUrl =
+  process.env.NODE_ENV == 'production'
+    ? process.env.NEXT_PUBLIC_STRAPI_URL
+    : 'http://localhost:1337';
 const url = `${baseUrl}/api/transcribed-chunks`;
 
 export async function createNewTranscription(transcription) {
